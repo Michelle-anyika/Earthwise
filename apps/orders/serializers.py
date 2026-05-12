@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.db import transaction
-from .models import Order, OrderItem, Cart, CartItem
+from .models import Order, OrderItem, Cart, CartItem, Contract
 from apps.products.models import Product
 from apps.inventory.models import Inventory
 
@@ -23,7 +23,8 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = (
             'id', 'user', 'user_name', 'status', 'total_amount', 
-            'delivery_address', 'payment_status', 'created_at', 'items'
+            'delivery_address', 'payment_status', 'scheduled_for', 
+            'created_at', 'items'
         )
         read_only_fields = ('user', 'total_amount', 'status', 'payment_status')
 
@@ -39,8 +40,13 @@ class OrderSerializer(serializers.ModelSerializer):
             quantity = item_data['quantity_kg']
             source = item_data.get('inventory_source', Inventory.SourceType.FARM)
             
-            # Use appropriate price (could be bulk_price_per_kg if logic applies)
-            price = product.price_per_kg
+            # Wholesale pricing logic
+            is_bulk = user.role == 'BUSINESS_CUSTOMER' and product.is_bulk_available
+            if is_bulk and product.bulk_price_per_kg:
+                price = product.bulk_price_per_kg
+            else:
+                price = product.price_per_kg
+                is_bulk = False
             
             # Check inventory (Basic check)
             try:
@@ -66,7 +72,8 @@ class OrderSerializer(serializers.ModelSerializer):
                 quantity_kg=quantity,
                 price_per_kg=price,
                 subtotal=item_total,
-                inventory_source=source
+                inventory_source=source,
+                is_bulk=is_bulk
             )
             
         order.total_amount = total_amount
@@ -91,3 +98,9 @@ class CartSerializer(serializers.ModelSerializer):
 
     def get_total_price(self, obj):
         return sum(item.product.price_per_kg * item.quantity_kg for item in obj.items.all())
+
+class ContractSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contract
+        fields = '__all__'
+        read_only_fields = ('user',)
