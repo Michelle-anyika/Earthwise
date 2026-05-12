@@ -35,6 +35,7 @@ class Order(models.Model):
         choices=PaymentStatus.choices, 
         default=PaymentStatus.UNPAID
     )
+    scheduled_for = models.DateTimeField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -53,6 +54,7 @@ class OrderItem(models.Model):
     # Price snapshotting
     price_per_kg = models.DecimalField(max_digits=10, decimal_places=2)
     subtotal = models.DecimalField(max_digits=12, decimal_places=2)
+    is_bulk = models.BooleanField(default=False)
     
     inventory_source = models.CharField(
         max_length=10, 
@@ -98,3 +100,31 @@ class CartItem(models.Model):
 
     def __str__(self):
         return f"{self.product.name} in {self.cart.user.username}'s cart"
+
+class Contract(models.Model):
+    class Frequency(models.TextChoices):
+        WEEKLY = 'WEEKLY', _('Weekly')
+        MONTHLY = 'MONTHLY', _('Monthly')
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.CASCADE, 
+        related_name='contracts'
+    )
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True, null=True)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    frequency = models.CharField(
+        max_length=20, 
+        choices=Frequency.choices, 
+        default=Frequency.MONTHLY
+    )
+    is_active = models.BooleanField(default=True)
+    
+    # Contract value or terms could be added here
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.title} - {self.user.username}"

@@ -1,7 +1,9 @@
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
-from .models import Order, Cart, CartItem
-from .serializers import OrderSerializer, CartSerializer, CartItemSerializer
+from .models import Order, Cart, CartItem, Contract
+from .serializers import (
+    OrderSerializer, CartSerializer, CartItemSerializer, ContractSerializer
+)
 from apps.users.permissions import IsStaffUser
 
 class OrderViewSet(viewsets.ModelViewSet):
@@ -55,3 +57,16 @@ class CartItemViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         cart, created = Cart.objects.get_or_create(user=self.request.user)
         serializer.save(cart=cart)
+
+class ContractViewSet(viewsets.ModelViewSet):
+    serializer_class = ContractSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.role in ['STAFF', 'ADMIN']:
+            return Contract.objects.all()
+        return Contract.objects.filter(user=user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
