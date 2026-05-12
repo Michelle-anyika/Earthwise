@@ -1,8 +1,8 @@
 from django.db import models
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
-from apps.products.models import Product
-from apps.inventory.models import Inventory
+from products.models import Product
+from inventory.models import Inventory
 
 class Order(models.Model):
     class Status(models.TextChoices):

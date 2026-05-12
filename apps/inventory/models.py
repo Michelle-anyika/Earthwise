@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from apps.products.models import Product
+from products.models import Product
 
 class Inventory(models.Model):
     class SourceType(models.TextChoices):

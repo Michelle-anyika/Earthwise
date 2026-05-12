@@ -1,8 +1,8 @@
 from rest_framework import serializers
 from django.db import transaction
 from .models import Order, OrderItem, Cart, CartItem, Contract
-from apps.products.models import Product
-from apps.inventory.models import Inventory
+from products.models import Product
+from inventory.models import Inventory
 
 class OrderItemSerializer(serializers.ModelSerializer):
     product_name = serializers.ReadOnlyField(source='product.name')

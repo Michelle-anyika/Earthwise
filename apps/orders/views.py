@@ -4,7 +4,7 @@ from .models import Order, Cart, CartItem, Contract
 from .serializers import (
     OrderSerializer, CartSerializer, CartItemSerializer, ContractSerializer
 )
-from apps.users.permissions import IsStaffUser
+from users.permissions import IsStaffUser
 
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()

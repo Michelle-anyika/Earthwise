@@ -211,7 +211,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('db', 6379)], # Assuming redis runs on same host or separate
+            "hosts": [env('REDIS_URL', default='redis://localhost:6379/1')],
         },
     },
 }
