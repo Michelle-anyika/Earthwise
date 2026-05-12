@@ -15,6 +15,7 @@ urlpatterns = [
     # Apps URLs
     path('api/auth/', include('authentication.urls')),
     path('api/products/', include('products.urls')),
+    path('api/inventory/', include('inventory.urls')),
 ]
 
 if settings.DEBUG:
