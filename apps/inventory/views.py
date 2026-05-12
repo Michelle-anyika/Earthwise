@@ -3,7 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from .models import Inventory
 from .serializers import InventorySerializer
-from apps.users.permissions import IsStaffUser
+from users.permissions import IsStaffUser
 
 class InventoryViewSet(viewsets.ModelViewSet):
     queryset = Inventory.objects.all()

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Inventory
-from apps.products.serializers import ProductSerializer
+from products.serializers import ProductSerializer
 
 class InventorySerializer(serializers.ModelSerializer):
     product_details = ProductSerializer(source='product', read_only=True)

@@ -3,7 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from .models import Address, Delivery
 from .serializers import AddressSerializer, DeliverySerializer
-from apps.users.permissions import IsStaffUser
+from users.permissions import IsStaffUser
 
 class AddressViewSet(viewsets.ModelViewSet):
     serializer_class = AddressSerializer

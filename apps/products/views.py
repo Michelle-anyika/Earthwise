@@ -1,7 +1,7 @@
 from rest_framework import viewsets, permissions
 from .models import ProductCategory, Product
 from .serializers import ProductCategorySerializer, ProductSerializer
-from apps.users.permissions import IsStaffUser
+from users.permissions import IsStaffUser
 
 class ProductCategoryViewSet(viewsets.ModelViewSet):
     queryset = ProductCategory.objects.all()

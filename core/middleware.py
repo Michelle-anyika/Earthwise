@@ -1,4 +1,4 @@
-from apps.analytics.models import AuditLog
+from analytics.models import AuditLog
 
 class AuditMiddleware:
     def __init__(self, get_response):

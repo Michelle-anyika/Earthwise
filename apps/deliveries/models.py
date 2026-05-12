@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
-from apps.orders.models import Order
+from orders.models import Order
 
 class Address(models.Model):
     user = models.ForeignKey(

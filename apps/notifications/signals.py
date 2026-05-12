@@ -2,8 +2,8 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
-from apps.orders.models import Order
-from apps.inventory.models import Inventory
+from orders.models import Order
+from inventory.models import Inventory
 from .models import Notification
 
 def notify_user(user, title, message, n_type):
